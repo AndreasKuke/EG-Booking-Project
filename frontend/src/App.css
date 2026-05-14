@@ -1,0 +1,184 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Georgia', 'Garamond', serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #f5f3f0;
+  min-height: 100vh;
+  color: #333;
+}
+
+.App {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.app-header {
+  background: #2d5016;
+  color: white;
+  padding: 1.25rem 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 3px solid #1f3810;
+  flex-shrink: 0;
+}
+
+.app-header h1 {
+  font-size: 1.6rem;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.header-controls {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.header-controls button {
+  padding: 0.6rem 1.2rem;
+  background: transparent;
+  border: 2px solid white;
+  color: white;
+  border-radius: 0;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-family: 'Georgia', serif;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.header-controls button:hover {
+  background: white;
+  color: #2d5016;
+}
+
+.header-controls button.active {
+  background: white;
+  color: #2d5016;
+}
+
+.view-toggle {
+  display: flex;
+  gap: 0.25rem;
+  border: 2px solid white;
+  border-radius: 0;
+}
+
+.toggle-btn {
+  padding: 0.5rem 0.8rem !important;
+  background: transparent !important;
+  border: none !important;
+  color: white !important;
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  cursor: pointer;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  transition: all 0.3s ease;
+}
+
+.toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.toggle-btn.active {
+  background: white !important;
+  color: #2d5016 !important;
+}
+
+.responses-btn {
+  position: relative;
+}
+
+.header-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #c62828;
+  color: white;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  min-width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  font-family: sans-serif;
+  pointer-events: none;
+}
+
+.user-info {
+  padding: 0 1rem;
+  color: #fff;
+  font-weight: 500;
+  font-size: 0.95rem;
+  font-style: italic;
+}
+
+.app-main {
+  flex: 1;
+  padding: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+.loading {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #2d5016;
+  font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+  .app-header {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem;
+    height: auto;
+  }
+
+  .app-header h1 {
+    font-size: 1.4rem;
+  }
+
+  .header-controls {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  .header-controls button {
+    padding: 0.5rem 0.9rem;
+    font-size: 0.85rem;
+  }
+
+  .view-toggle {
+    border: 2px solid white;
+  }
+
+  .toggle-btn {
+    padding: 0.4rem 0.6rem !important;
+    font-size: 0.75rem !important;
+  }
+
+  .user-info {
+    padding: 0 0.5rem;
+    font-size: 0.85rem;
+  }
+}

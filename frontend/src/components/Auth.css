@@ -1,0 +1,111 @@
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(rgba(45, 80, 22, 0.7), rgba(45, 80, 22, 0.7)), 
+              url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23f5f3f0" width="1200" height="600"/></svg>');
+  background-size: cover;
+  background-position: center;
+  padding: 1rem;
+}
+
+.auth-box {
+  background: white;
+  padding: 3rem;
+  border-radius: 0;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 420px;
+}
+
+.auth-box h2 {
+  margin-bottom: 2rem;
+  color: #2d5016;
+  font-size: 2rem;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.6rem;
+  color: #333;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.9rem;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.85rem;
+  border: 2px solid #ddd;
+  border-radius: 0;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #2d5016;
+}
+
+.auth-box button[type="submit"] {
+  width: 100%;
+  padding: 0.9rem;
+  background: #2d5016;
+  color: white;
+  border: none;
+  border-radius: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.auth-box button[type="submit"]:hover:not(:disabled) {
+  background: #1f3810;
+}
+
+.auth-box button[type="submit"]:disabled {
+  background: #bbb;
+  cursor: not-allowed;
+}
+
+.error-message {
+  background: #ffe0b2;
+  color: #bf360c;
+  padding: 1rem;
+  border-radius: 0;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid #d84315;
+  font-size: 0.95rem;
+}
+
+.toggle-auth {
+  text-align: center;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.toggle-btn {
+  background: none;
+  border: none;
+  color: #2d5016;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.toggle-btn:hover {
+  color: #1f3810;
+}

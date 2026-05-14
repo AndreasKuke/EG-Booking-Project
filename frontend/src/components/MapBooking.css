@@ -1,0 +1,396 @@
+.map-booking-container {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 2rem;
+  background: white;
+  padding: 2rem;
+  width: 100%;
+  height: calc(100vh - 80px);
+  overflow: hidden;
+}
+
+.map-section {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.map-section h2 {
+  color: #2d5016;
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.map-canvas {
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  padding: 2rem;
+  border-radius: 0;
+  border: 2px solid #2d5016;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  position: relative;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.map-zone {
+  background: rgba(255, 255, 255, 0.8);
+  padding: 1.5rem;
+  border-radius: 4px;
+  border: 2px solid #2d5016;
+  position: relative;
+}
+
+.zone-label {
+  position: absolute;
+  top: -12px;
+  left: 1.5rem;
+  background: white;
+  padding: 0 0.5rem;
+  color: #2d5016;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  z-index: 10;
+}
+
+.main-zone {
+  border-color: #d84315;
+}
+
+.main-zone .zone-label {
+  color: #d84315;
+}
+
+.vintage-zone {
+  border-color: #8b6f47;
+}
+
+.vintage-zone .zone-label {
+  color: #8b6f47;
+}
+
+.garden-zone {
+  border-color: #2d5016;
+}
+
+.garden-zone .zone-label {
+  color: #2d5016;
+}
+
+.stands-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.main-stands {
+  grid-template-columns: repeat(10, 1fr);
+}
+
+.vintage-stands {
+  grid-template-columns: repeat(8, 1fr);
+}
+
+.garden-stands {
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.map-stand {
+  aspect-ratio: 1;
+  border: 2px solid #999;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.map-stand:disabled {
+  cursor: not-allowed;
+  background: #f0f0f0;
+  border-color: #ccc;
+}
+
+.map-stand.available {
+  background: #e8f5e9;
+  border-color: #2d5016;
+  color: #2d5016;
+  font-weight: 700;
+}
+
+.map-stand.available:hover {
+  transform: scale(1.15);
+  background: #c8e6c9;
+  box-shadow: 0 6px 16px rgba(45, 80, 22, 0.3);
+}
+
+.map-stand.booked {
+  background: #d7ccc8;
+  border-color: #5d4037;
+  color: #3e2723;
+}
+
+.map-stand.user-booked {
+  background: #ffe0b2;
+  border-color: #d84315;
+  color: #bf360c;
+  border-width: 3px;
+  box-shadow: 0 0 0 2px #ffe0b2, 0 0 0 4px #d84315;
+}
+
+.stand-label {
+  font-size: 0.75rem;
+}
+
+.legend {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1rem;
+  padding: 1.5rem;
+  background: #fafaf8;
+  border-radius: 0;
+  border: 1px solid #e0d9d2;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+  color: #666;
+}
+
+.legend-color {
+  width: 24px;
+  height: 24px;
+  border-radius: 2px;
+  border: 2px solid #999;
+}
+
+.legend-color.available {
+  background: #e8f5e9;
+  border-color: #2d5016;
+}
+
+.legend-color.booked {
+  background: #d7ccc8;
+  border-color: #5d4037;
+}
+
+.legend-color.user-booked {
+  background: #ffe0b2;
+  border-color: #d84315;
+}
+
+.details-section {
+  background: #fafaf8;
+  padding: 2rem;
+  border-radius: 0;
+  border: 1px solid #e0d9d2;
+  position: sticky;
+  top: 2rem;
+}
+
+.details-section h3 {
+  color: #2d5016;
+  margin-bottom: 1.5rem;
+  font-size: 1.4rem;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.no-selection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  color: #999;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.stand-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.detail-row:last-of-type {
+  border-bottom: none;
+}
+
+.detail-row .label {
+  font-weight: 600;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.detail-row .value {
+  color: #333;
+  font-weight: 500;
+}
+
+.detail-row .status-available {
+  color: #2d5016;
+  font-weight: 700;
+}
+
+.detail-row .status-booked {
+  color: #5d4037;
+  font-weight: 700;
+}
+
+.detail-row .status-user-booked {
+  color: #d84315;
+  font-weight: 700;
+}
+
+.btn {
+  padding: 0.9rem 1.5rem;
+  border: 2px solid #2d5016;
+  border-radius: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1.5rem;
+  width: 100%;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: 'Georgia', serif;
+}
+
+.btn-book {
+  background: #2d5016;
+  color: white;
+}
+
+.btn-book:hover {
+  background: white;
+  color: #2d5016;
+}
+
+.btn-cancel {
+  background: #8b4513;
+  color: white;
+  border-color: #8b4513;
+}
+
+.btn-cancel:hover {
+  background: white;
+  color: #8b4513;
+}
+
+@media (max-width: 1024px) {
+  .map-booking-container {
+    grid-template-columns: 1fr;
+    height: auto;
+    overflow: visible;
+  }
+
+  .map-section {
+    overflow: visible;
+  }
+
+  .details-section {
+    border-left: none;
+    border-top: 1px solid #ddd;
+    padding-left: 0;
+    padding-top: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .map-booking-container {
+    padding: 1rem;
+    gap: 1rem;
+    height: auto;
+    overflow: visible;
+  }
+
+  .map-section {
+    overflow: visible;
+  }
+
+  .map-canvas {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .map-zone {
+    padding: 1rem;
+  }
+
+  .stands-grid {
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)) !important;
+    gap: 0.75rem;
+  }
+
+  .main-stands,
+  .vintage-stands,
+  .garden-stands {
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)) !important;
+  }
+
+  .legend {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .details-section {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .map-booking-container {
+    padding: 1rem;
+  }
+
+  .map-canvas {
+    padding: 0.75rem;
+    gap: 0.75rem;
+  }
+
+  .map-zone {
+    padding: 0.75rem;
+  }
+
+  .stands-grid {
+    grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)) !important;
+    gap: 0.5rem;
+  }
+
+  .legend {
+    padding: 1rem;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .details-section {
+    padding: 1rem;
+  }
+
+  .details-section h3 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+}
