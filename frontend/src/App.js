@@ -136,7 +136,7 @@ function App() {
   return (
     <div className="App">
       <header className="app-header">
-        <h1>Engestofte Julemarked</h1>
+        <h1>E.G. Julemarked</h1>
         <div className="header-controls">
           <button onClick={() => setView('booking')} className={view === 'booking' ? 'active' : ''}>
             Bestil Stand

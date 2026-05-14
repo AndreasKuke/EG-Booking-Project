@@ -16,7 +16,7 @@ function UserResponses({ submissions, onAcceptOffer, onDeclineOffer }) {
     <div className="user-responses-container">
       <h2>Mine svar</h2>
       <p className="responses-intro">
-        Når Engestofte Gods tildeler dig en stand, vises den her. Du kan acceptere tilbuddet eller anmode om et andet sted.
+        Når E.G. tildeler dig en stand, vises den her. Du kan acceptere tilbuddet eller anmode om et andet sted.
       </p>
 
       {awaiting.length === 0 && accepted.length === 0 ? (
@@ -56,7 +56,7 @@ function UserResponses({ submissions, onAcceptOffer, onDeclineOffer }) {
               </div>
 
               <p className="offer-note">
-                Hvis du anmoder om et andet sted, vil Engestofte Gods blive informeret og vende tilbage med et nyt tilbud.
+                Hvis du anmoder om et andet sted, vil E.G. blive informeret og vende tilbage med et nyt tilbud.
               </p>
             </div>
           ))}
