@@ -14,7 +14,7 @@ A full-stack web application for booking stands at Christmas markets, similar to
 ## Project Structure
 
 ```
-Engestofte/
+E.G/
 ├── frontend/                 # React frontend application
 │   ├── public/
 │   │   └── index.html
