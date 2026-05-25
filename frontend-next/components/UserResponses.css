@@ -1,0 +1,124 @@
+.user-responses-container {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.user-responses-container h2 {
+  color: #2d5016;
+  font-size: 1.6rem;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+
+.responses-intro {
+  color: #888;
+  font-size: 0.88rem;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.no-offers { text-align: center; padding: 4rem 2rem; color: #bbb; }
+.no-offers-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+.no-offers p { font-size: 0.95rem; font-style: italic; }
+
+.offers-list { display: flex; flex-direction: column; gap: 1.25rem; }
+
+.offer-card { border: 1.5px solid #ddd; background: white; padding: 1.5rem; }
+.pending-offer  { border-color: #2d5016; border-left: 4px solid #2d5016; }
+.accepted-offer { border-color: #aaa; border-left: 4px solid #aaa; background: #fafafa; }
+
+.offer-tag {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #2d5016;
+  background: #f0f9f0;
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  margin-bottom: 1rem;
+  font-family: sans-serif;
+}
+
+.accepted-tag { color: #555; background: #f0f0f0; }
+
+.offer-stand-block { margin-bottom: 1.25rem; }
+
+.offer-stand-num {
+  font-size: 1.8rem;
+  font-weight: 300;
+  color: #2d5016;
+  font-family: 'Georgia', serif;
+  line-height: 1;
+}
+
+.offer-stand-loc { font-size: 0.88rem; color: #888; margin-top: 0.2rem; }
+
+.offer-original-prefs { margin-bottom: 1.5rem; }
+
+.offer-prefs-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: #aaa;
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.offer-chips { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+
+.offer-chip {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  background: #f5f5f5;
+  color: #666;
+  border: 1px solid #ddd;
+  border-radius: 999px;
+  font-family: sans-serif;
+}
+
+.offer-actions { display: flex; gap: 0.75rem; margin-bottom: 1rem; }
+
+.btn-accept-offer {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  background: #2d5016;
+  color: white;
+  border: 2px solid #2d5016;
+  font-size: 0.88rem;
+  font-weight: 700;
+  font-family: 'Georgia', serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-accept-offer:hover { background: white; color: #2d5016; }
+
+.btn-decline-offer {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  background: white;
+  color: #795548;
+  border: 2px solid #795548;
+  font-size: 0.88rem;
+  font-weight: 700;
+  font-family: 'Georgia', serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-decline-offer:hover { background: #795548; color: white; }
+
+.offer-note { font-size: 0.78rem; color: #bbb; line-height: 1.5; font-style: italic; margin: 0; }
+.accepted-msg { font-size: 0.88rem; color: #888; margin: 0; line-height: 1.5; }
+
+@media (max-width: 600px) {
+  .user-responses-container { padding: 1.25rem 1rem; }
+  .offer-actions { flex-direction: column; }
+}
