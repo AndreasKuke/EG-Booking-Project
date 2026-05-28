@@ -4,16 +4,44 @@ import BlueprintBooking from './components/BlueprintBooking';
 import AdminPanel from './components/AdminPanel';
 import UserResponses from './components/UserResponses';
 
-const MOCK_STANDS = Array.from({ length: 90 }, (_, i) => ({
-  id: i + 1,
+const STAND_TYPES = {
+  A: { size: 12, price: '985.00', priceLabel: 'kr 985,- + moms', description: 'Udendørsstand 3 x 4 m uden elektricitet' },
+  B: { size: 9, price: '1685.00', priceLabel: 'kr 1.685,- + moms', description: 'Kostalden langside 3 x 3 m med elektricitet' },
+  C: { size: 9, price: '1895.00', priceLabel: 'kr 1.895,- + moms', description: 'Kostalden center 3 x 3 m med elektricitet' },
+  D: { size: 10.9, price: '1635.00', priceLabel: 'kr 1.635,- + moms', description: 'Hestestalden ca. 3,3 x 3,3 m med elektricitet' },
+  E: { size: 7.5, price: '1695.00', priceLabel: 'kr 1.695,- + moms', description: 'Laden langside 3 x 2,5 m med elektricitet' },
+  F: { size: 7.5, price: '1775.00', priceLabel: 'kr 1.775,- + moms', description: 'Laden center 3 x 2,5 m med elektricitet' },
+  G: { size: 7.5, price: '1995.00', priceLabel: 'kr 1.995,- + moms', description: 'Laden center/hjørnestand 3 x 2,5 m med elektricitet' },
+  H: { size: 5.4, price: '1325.00', priceLabel: 'kr 1.325,- + moms', description: 'Jagtstuen langside 3 x 1,8 m med elektricitet' },
+};
+
+function getStandTypeCode(id) {
+  if (id >= 98) return 'A';
+  if (id <= 11) return 'D';
+  if (id <= 57) return [37, 38, 39, 40, 41, 42].includes(id) ? 'C' : 'B';
+  if (id <= 63) return 'H';
+  if ([80, 81, 82, 83, 84, 85, 86, 87, 89, 90].includes(id)) return 'G';
+  if ([74, 75, 76, 77, 78, 79, 88].includes(id)) return 'F';
+  return 'E';
+}
+
+const MOCK_STANDS = Array.from({ length: 109 }, (_, i) => {
+  const id = i + 1;
+  const typeCode = getStandTypeCode(id);
+  const type = STAND_TYPES[typeCode];
+  return {
+  id,
   event_id: 1,
   row: Math.floor(i / 10),
   col: i % 10,
-  size: 3,
-  price: '500.00',
-  description: `Stand ${i + 1}`,
+  size: type.size,
+  price: type.price,
+  priceLabel: type.priceLabel,
+  standType: typeCode,
+  description: type.description,
   status: 'available'
-}));
+  };
+});
 
 const MOCK_BOOKINGS = [
   { id: 1, stand_id: 3,  event_id: 1, status: 'confirmed', email: 'shop@example.com',    company_name: 'Holiday Shop',  price: '500.00', created_at: '2026-05-10' },
@@ -50,9 +78,10 @@ function App() {
     const newSubmission = {
       id: Date.now(),
       email,
-      name:        formData.name,
-      company:     formData.company,
-      phone:       formData.phone,
+      ...formData,
+      name: formData.name,
+      company: formData.company,
+      phone: formData.phone,
       description: formData.description,
       preferences: [...userPreferences],
       status: 'pending',
@@ -76,6 +105,7 @@ function App() {
       prev.map(s => s.id === submissionId ? { ...s, status: 'accepted', assignedStand: standId } : s)
     );
     const sub = submissions.find(s => s.id === submissionId);
+    const stand = stands.find(s => s.id === standId);
     setBookings(prev => [...prev, {
       id: Date.now(),
       stand_id: standId,
@@ -83,7 +113,7 @@ function App() {
       status: 'confirmed',
       email: sub.email,
       company_name: sub.company,
-      price: '500.00',
+      price: stand?.price || '0.00',
       created_at: new Date().toISOString().split('T')[0],
     }]);
   };
@@ -109,6 +139,7 @@ function App() {
     setSubmissions(prev =>
       prev.map(s => s.id === submissionId ? { ...s, status: 'accepted' } : s)
     );
+    const stand = stands.find(s => s.id === sub.assignedStand);
     setBookings(prev => [...prev, {
       id: Date.now(),
       stand_id: sub.assignedStand,
@@ -116,7 +147,7 @@ function App() {
       status: 'confirmed',
       email: sub.email,
       company_name: sub.company,
-      price: '500.00',
+      price: stand?.price || '0.00',
       created_at: new Date().toISOString().split('T')[0],
     }]);
   };
