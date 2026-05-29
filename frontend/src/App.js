@@ -44,13 +44,19 @@ const MOCK_STANDS = Array.from({ length: 109 }, (_, i) => {
 });
 
 const MOCK_BOOKINGS = [
-  { id: 1, stand_id: 3,  event_id: 1, status: 'confirmed', email: 'shop@example.com',    company_name: 'Holiday Shop',  price: '500.00', created_at: '2026-05-10' },
-  { id: 2, stand_id: 14, event_id: 1, status: 'confirmed', email: 'craft@example.com',   company_name: 'Craft Makers',  price: '500.00', created_at: '2026-05-10' },
-  { id: 3, stand_id: 25, event_id: 1, status: 'confirmed', email: 'toys@example.com',    company_name: 'Toy Store',     price: '500.00', created_at: '2026-05-10' },
-  { id: 4, stand_id: 40, event_id: 1, status: 'confirmed', email: 'bakery@example.com',  company_name: 'Bakery Stand',  price: '500.00', created_at: '2026-05-10' },
-  { id: 5, stand_id: 60, event_id: 1, status: 'confirmed', email: 'candle@example.com',  company_name: 'Candle Maker',  price: '500.00', created_at: '2026-05-10' },
-  { id: 6, stand_id: 72, event_id: 1, status: 'confirmed', email: 'wool@example.com',    company_name: 'Wool & Knits',  price: '500.00', created_at: '2026-05-10' },
-  { id: 7, stand_id: 85, event_id: 1, status: 'confirmed', email: 'pottery@example.com', company_name: 'Pottery Works', price: '500.00', created_at: '2026-05-10' },
+  // Demo-bookinger med julemarkedskategorier, så anbefalingslogikken kan testes.
+  { id: 1,  stand_id: 3,   event_id: 1, status: 'confirmed', email: 'vinloftet@example.com',      company_name: 'Vinloftet Portvin',             price: '1635.00', created_at: '2026-05-10' },
+  { id: 2,  stand_id: 14,  event_id: 1, status: 'confirmed', email: 'glogg@example.com',          company_name: 'Søgaard Gløgg og Varme Drikke', price: '1685.00', created_at: '2026-05-10' },
+  { id: 3,  stand_id: 25,  event_id: 1, status: 'confirmed', email: 'honning@example.com',        company_name: 'Møn Honning & Delikatesser',    price: '1685.00', created_at: '2026-05-10' },
+  { id: 4,  stand_id: 40,  event_id: 1, status: 'confirmed', email: 'chokolade@example.com',      company_name: 'Nordisk Chokoladeværksted',     price: '1895.00', created_at: '2026-05-10' },
+  { id: 5,  stand_id: 58,  event_id: 1, status: 'confirmed', email: 'julepynt@example.com',       company_name: 'Gamle Dages Julepynt',          price: '1325.00', created_at: '2026-05-10' },
+  { id: 6,  stand_id: 60,  event_id: 1, status: 'confirmed', email: 'smykker@example.com',        company_name: 'Lysgaard Smykker',              price: '1325.00', created_at: '2026-05-10' },
+  { id: 7,  stand_id: 72,  event_id: 1, status: 'confirmed', email: 'uld@example.com',            company_name: 'Lolland Uld & Strik',           price: '1695.00', created_at: '2026-05-10' },
+  { id: 8,  stand_id: 85,  event_id: 1, status: 'confirmed', email: 'keramik@example.com',        company_name: 'Engestofte Keramik',            price: '1995.00', created_at: '2026-05-10' },
+  { id: 9,  stand_id: 91,  event_id: 1, status: 'confirmed', email: 'vinboden@example.com',       company_name: 'Vinter Vinboden',               price: '1695.00', created_at: '2026-05-10' },
+  { id: 10, stand_id: 98,  event_id: 1, status: 'confirmed', email: 'madbod@example.com',         company_name: 'Julemarkedets Madbod',          price: '985.00',  created_at: '2026-05-10' },
+  { id: 11, stand_id: 104, event_id: 1, status: 'confirmed', email: 'pølser@example.com',         company_name: 'Varme Pølser og Sennep',        price: '985.00',  created_at: '2026-05-10' },
+  { id: 12, stand_id: 108, event_id: 1, status: 'confirmed', email: 'snaps@example.com',          company_name: 'Bornholmske Delikatesser',      price: '985.00',  created_at: '2026-05-10' },
 ];
 
 function App() {

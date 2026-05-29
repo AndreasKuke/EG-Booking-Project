@@ -10,6 +10,24 @@
   overflow: hidden;
 }
 
+.application-first-container {
+  align-items: flex-start;
+  background: #fafaf8;
+  display: flex;
+  height: calc(100vh - 72px);
+  justify-content: center;
+  overflow-y: auto;
+  padding: 1.5rem;
+  box-sizing: border-box;
+}
+
+.application-first-panel {
+  background: white;
+  border: 1px solid #e0d9d2;
+  max-width: 780px;
+  width: 100%;
+}
+
 .blueprint-section {
   display: flex;
   flex-direction: column;
@@ -242,6 +260,7 @@
 
 .legend-color.available { background: #e8f5e9; border-color: #2d5016; }
 .legend-color.booked    { background: #d7ccc8; border-color: #795548; }
+.legend-color.recommended { background: #e7f4ff; border-color: #1f6f9f; }
 .legend-color.pref-1    { background: #FFD700; border-color: #A07800; }
 .legend-color.pref-2    { background: #FF8C42; border-color: #B05000; }
 .legend-color.pref-3    { background: #82C4E8; border-color: #2A7FAA; }
@@ -357,6 +376,80 @@
 }
 
 .pref-remove:hover { color: #c62828; }
+
+.recommendations-panel {
+  background: white;
+  border: 1.5px solid #c6dceb;
+  margin-bottom: 0.85rem;
+  padding: 0.75rem;
+}
+
+.recommendations-header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  color: #1f6f9f;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+.recommendations-header small {
+  background: #e7f4ff;
+  color: #1f6f9f;
+  font-size: 0.68rem;
+  padding: 0.15rem 0.45rem;
+}
+
+.recommendation-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.55rem;
+}
+
+.recommendation-tags span {
+  background: #f1f8f1;
+  color: #2d5016;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.45rem;
+}
+
+.recommendation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: 0.65rem;
+}
+
+.recommendation-row {
+  align-items: center;
+  background: #fbfdff;
+  border: 1px solid #d5e5ef;
+  color: #333;
+  cursor: pointer;
+  display: flex;
+  font-family: 'Georgia', serif;
+  justify-content: space-between;
+  padding: 0.45rem 0.55rem;
+  text-align: left;
+}
+
+.recommendation-row:hover {
+  border-color: #1f6f9f;
+}
+
+.recommendation-row strong {
+  color: #1f6f9f;
+  font-size: 0.78rem;
+}
+
+.recommendation-row span {
+  color: #777;
+  font-size: 0.72rem;
+}
 
 /* ── Application Form ──────────────────────────────────── */
 .application-panel {

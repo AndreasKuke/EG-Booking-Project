@@ -119,6 +119,10 @@ function BlueprintBooking({
   const [selectedStand, setSelectedStand] = useState(null);
   const [email, setEmail] = useState('');
   const [showApplicationForm, setShowApplicationForm] = useState(false);
+  const [applicationReady, setApplicationReady] = useState(false);
+  const [recommendations, setRecommendations] = useState(null);
+  const [recommendationsLoading, setRecommendationsLoading] = useState(false);
+  const [recommendationsError, setRecommendationsError] = useState('');
   const [form, setForm] = useState({
     name: '',
     company: '',
@@ -158,19 +162,49 @@ function BlueprintBooking({
     setForm(prev => ({ ...prev, [field]: value }));
   };
 
+  const handleContinueToMap = async () => {
+    if (!isFormValid) return;
+    const completeForm = { ...form, email: applicationEmail };
+    setEmail(applicationEmail);
+    setApplicationReady(true);
+    setRecommendationsLoading(true);
+    setRecommendationsError('');
+
+    try {
+      const res = await fetch('/api/recommend-stands', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ formData: completeForm, stands, bookings }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Recommendation request failed');
+      setRecommendations(data);
+    } catch {
+      setRecommendations(null);
+      setRecommendationsError('Anbefalinger kunne ikke genereres. Du kan stadig frit vælge stande på kortet.');
+    } finally {
+      setRecommendationsLoading(false);
+    }
+  };
+
   const handleFinalSubmit = () => {
-    onSubmitPreferences(applicationEmail, { ...form, email: applicationEmail });
-    setShowApplicationForm(false);
+    onSubmitPreferences(applicationEmail, {
+      ...form,
+      email: applicationEmail,
+      recommendations,
+    });
   };
 
   const isBooked = (id) => bookings.some(b => b.stand_id === id && b.status === 'confirmed');
   const getUserPref = (id) => userPreferences.find(p => p.standId === id);
   const getStand = (id) => stands.find(stand => stand.id === id);
+  const getRecommendation = (id) => recommendations?.recommendations?.find(rec => rec.standId === id);
 
   const getStatus = (stand) => {
     if (isBooked(stand.id)) return 'booked';
     const pref = getUserPref(stand.id);
     if (pref) return `preference-${pref.rank}`;
+    if (getRecommendation(stand.id)) return 'recommended';
     return 'available';
   };
 
@@ -178,6 +212,7 @@ function BlueprintBooking({
     const status = getStatus(stand);
     const sel = selectedStand?.id === stand.id;
     if (status === 'available') return { fill: sel ? '#cce7df' : '#f7fbf2', stroke: '#2d5016', sw: sel ? 3 : 1.4 };
+    if (status === 'recommended') return { fill: sel ? '#cce7df' : '#e7f4ff', stroke: '#1f6f9f', sw: sel ? 3 : 2.4 };
     if (status === 'booked') return { fill: '#d7ccc8', stroke: '#795548', sw: 1.4 };
     const rank = parseInt(status.split('-')[1], 10);
     const c = PREF_COLORS[rank];
@@ -189,7 +224,6 @@ function BlueprintBooking({
 
   const handleSelectBuilding = (building) => {
     if (building.disabled) return;
-    setShowApplicationForm(false);
     setActiveBuildingId(building.id);
     setSelectedStand(null);
   };
@@ -236,6 +270,7 @@ function BlueprintBooking({
     const { fill, stroke, sw } = getCellStyle(stand);
     const pref = getUserPref(id);
     const booked = isBooked(id);
+    const recommended = getRecommendation(id);
 
     return (
       <g
@@ -251,6 +286,9 @@ function BlueprintBooking({
         <text x={x + w / 2} y={y + h / 2 + 11} textAnchor="middle" fontSize="12" fontWeight="700" fill={stroke}>{label}</text>
         {pref && (
           <text x={x + w - 10} y={y + 16} textAnchor="middle" fontSize="13" fontWeight="700" fill={stroke}>{pref.rank}</text>
+        )}
+        {!pref && recommended && (
+          <text x={x + w - 10} y={y + 16} textAnchor="middle" fontSize="14" fontWeight="700" fill={stroke}>★</text>
         )}
       </g>
     );
@@ -379,6 +417,77 @@ function BlueprintBooking({
     </>, 1000, 520
   );
 
+  if (!applicationReady && !preferencesSubmitted) {
+    return (
+      <div className="application-first-container">
+        <div className="application-panel application-first-panel">
+          <div className="application-header">
+            <h3>Ansøgningsskema</h3>
+            <p>Udfyld oplysningerne først. Derefter får du forslag til relevante stande og kan frit vælge dine 3 prioriterede standønsker på kortet.</p>
+          </div>
+
+          <div className="application-form">
+            <div className="form-field form-field-full">
+              <label>Virksomhedens navn *</label>
+              <input type="text" value={form.company} onChange={updateForm('company')} />
+            </div>
+            <div className="form-field form-field-full">
+              <label>Kontaktperson *</label>
+              <input type="text" value={form.name} onChange={updateForm('name')} />
+            </div>
+            <div className="form-field">
+              <label>CVR nr.</label>
+              <input type="text" value={form.cvr} onChange={updateForm('cvr')} />
+            </div>
+            <div className="form-field">
+              <label>Telefon / mobil *</label>
+              <input type="tel" value={form.phone} onChange={updateForm('phone')} />
+            </div>
+            <div className="form-field form-field-full">
+              <label>Adresse</label>
+              <input type="text" value={form.address} onChange={updateForm('address')} />
+            </div>
+            <div className="form-field">
+              <label>Postnummer og by</label>
+              <input type="text" value={form.postalCity} onChange={updateForm('postalCity')} />
+            </div>
+            <div className="form-field">
+              <label>Email *</label>
+              <input type="email" value={applicationEmail} onChange={(e) => { setEmail(e.target.value); setForm(prev => ({ ...prev, email: e.target.value })); }} />
+            </div>
+            <div className="form-field form-field-full">
+              <label>Website</label>
+              <input type="text" value={form.website} onChange={updateForm('website')} />
+            </div>
+            <div className="form-field">
+              <label>Antal borde (155 kr. pr. stk.)</label>
+              <input type="number" min="0" value={form.tableCount} onChange={updateForm('tableCount')} />
+            </div>
+            <div className="form-field">
+              <label>Antal stole (45 kr. pr. stk.)</label>
+              <input type="number" min="0" value={form.chairCount} onChange={updateForm('chairCount')} />
+            </div>
+            <div className="form-field form-field-full">
+              <label>Kort beskrivelse af forretning / stand *</label>
+              <textarea rows="4" value={form.description} onChange={updateForm('description')} />
+            </div>
+            <div className="form-field form-field-full">
+              <label>For nye stadeholdere: produkter der sælges</label>
+              <textarea rows="4" value={form.newVendorProducts} onChange={updateForm('newVendorProducts')} />
+            </div>
+            <label className="terms-check">
+              <input type="checkbox" checked={form.acceptsTerms} onChange={updateForm('acceptsTerms')} />
+              <span>Jeg bekræfter, at oplysningerne er korrekte, og at jeg har læst praktisk information og regler i ansøgningsmaterialet.</span>
+            </label>
+            <button className="btn btn-book drawer-submit" disabled={!isFormValid || recommendationsLoading} onClick={handleContinueToMap}>
+              {recommendationsLoading ? 'Finder standforslag...' : 'Fortsæt til standvalg'}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="blueprint-booking-container">
       <div className="blueprint-section">
@@ -435,6 +544,7 @@ function BlueprintBooking({
         <div className="legend">
           <div className="legend-item"><div className="legend-color available" />Ledig</div>
           <div className="legend-item"><div className="legend-color booked" />Optaget</div>
+          <div className="legend-item"><div className="legend-color recommended" />Anbefalet</div>
           <div className="legend-item"><div className="legend-color pref-1" />1. valg</div>
           <div className="legend-item"><div className="legend-color pref-2" />2. valg</div>
           <div className="legend-item"><div className="legend-color pref-3" />3. valg</div>
@@ -537,7 +647,47 @@ function BlueprintBooking({
           <>
             <div className="preferences-panel">
               <h3>Standønsker</h3>
-              <p className="pref-hint">Vælg en bygning på kortet, og klik derefter på op til 3 stande.</p>
+              <p className="pref-hint">Vælg en bygning på kortet, og klik derefter på op til 3 stande. Anbefalingerne er kun forslag.</p>
+
+              <div className="recommendations-panel">
+                <div className="recommendations-header">
+                  <span>Standforslag</span>
+                  {recommendations?.category && <small>{recommendations.category}</small>}
+                </div>
+                {recommendationsLoading ? (
+                  <p className="info-msg">Finder anbefalinger ud fra ansøgningen...</p>
+                ) : recommendationsError ? (
+                  <p className="info-msg">{recommendationsError}</p>
+                ) : recommendations?.recommendations?.length > 0 ? (
+                  <>
+                    {recommendations.tags?.length > 0 && (
+                      <div className="recommendation-tags">
+                        {recommendations.tags.map(tag => <span key={tag}>{tag}</span>)}
+                      </div>
+                    )}
+                    <div className="recommendation-list">
+                      {recommendations.recommendations.slice(0, 4).map(rec => (
+                        <button
+                          key={rec.standId}
+                          type="button"
+                          className="recommendation-row"
+                          onClick={() => {
+                            const stand = getStand(rec.standId);
+                            const building = getBuildingForStand(rec.standId);
+                            if (building) setActiveBuildingId(building.id);
+                            if (stand) setSelectedStand(stand);
+                          }}
+                        >
+                          <strong>Stand {rec.standId}</strong>
+                          <span>{rec.building}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <p className="info-msg">Ingen anbefalinger genereret. Du kan stadig vælge frit.</p>
+                )}
+              </div>
 
               {[1, 2, 3].map(rank => {
                 const pref = userPreferences.find(p => p.rank === rank);
@@ -565,9 +715,9 @@ function BlueprintBooking({
               <button
                 className="btn btn-submit"
                 disabled={!hasThreePreferences}
-                onClick={() => setShowApplicationForm(true)}
+                onClick={handleFinalSubmit}
               >
-                Fortsæt til ansøgning
+                Indsend ansøgning
               </button>
               {!hasThreePreferences && (
                 <p className="info-msg">Vælg 3 prioriterede stande for at fortsætte.</p>
