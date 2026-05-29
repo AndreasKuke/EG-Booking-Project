@@ -211,7 +211,7 @@ function BlueprintBooking({
       <text x="845" y="155" fill="white" fontSize="34" fontWeight="700" transform="rotate(27 845 155)">Søvej</text>
       <path d="M172 585 L1220 1125" stroke="#b8c7d1" strokeWidth="70" strokeLinecap="round" fill="none" />
       <text x="438" y="748" fill="white" fontSize="32" fontWeight="700" transform="rotate(27 438 748)">Søvej 10</text>
-      <path d="M1152 260 L1162 1155" stroke="#b8c7d1" strokeWidth="70" strokeLinecap="round" fill="none" />
+      <path d="M1220 -80 L1230 2520" stroke="#b8c7d1" strokeWidth="55" strokeLinecap="round" fill="none"/>
 
       {BUILDINGS.map(building => renderSiteBuilding(building, handleSelectBuilding))}
       {SITE_ONLY_BUILDINGS.map(building => renderSiteBuilding(building, handleSelectBuilding))}
