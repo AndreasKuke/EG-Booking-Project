@@ -184,6 +184,22 @@ function AdminPanel({ stands, bookings, submissions, onAcceptSubmission, onAssig
                   })}
                 </div>
 
+                {sub.recommendations?.recommendations?.length > 0 && (
+                  <div className="sub-recommendations">
+                    <div className="sub-recommendations-title">
+                      Systemforslag
+                      {sub.recommendations.category && <span>{sub.recommendations.category}</span>}
+                    </div>
+                    <div className="sub-recommendations-list">
+                      {sub.recommendations.recommendations.slice(0, 4).map(rec => (
+                        <div key={rec.standId} className="sub-recommendation-chip">
+                          Stand {rec.standId} · {rec.building}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <div className="sub-prefs">
                   {sub.preferences.map(pref => {
                     const taken      = isStandTaken(pref.standId);

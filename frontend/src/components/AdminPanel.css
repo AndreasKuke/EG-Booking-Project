@@ -153,6 +153,46 @@
   font-style: italic;
 }
 
+.sub-recommendations {
+  background: white;
+  border: 1px solid #d5e5ef;
+  margin-top: 0.75rem;
+  padding: 0.65rem 0.75rem;
+}
+
+.sub-recommendations-title {
+  align-items: center;
+  color: #1f6f9f;
+  display: flex;
+  font-size: 0.75rem;
+  font-weight: 700;
+  gap: 0.5rem;
+  letter-spacing: 0.4px;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.sub-recommendations-title span {
+  background: #e7f4ff;
+  color: #1f6f9f;
+  font-size: 0.68rem;
+  padding: 0.15rem 0.45rem;
+}
+
+.sub-recommendations-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.sub-recommendation-chip {
+  background: #fbfdff;
+  border: 1px solid #d5e5ef;
+  color: #555;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.45rem;
+}
+
 .assign-section { margin-top: 0.85rem; padding-top: 0.75rem; border-top: 1px dashed #ddd; }
 
 .assign-other-btn {
