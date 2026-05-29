@@ -123,6 +123,8 @@ function BlueprintBooking({
   const [recommendations, setRecommendations] = useState(null);
   const [recommendationsLoading, setRecommendationsLoading] = useState(false);
   const [recommendationsError, setRecommendationsError] = useState('');
+  const [touchedFields, setTouchedFields] = useState({});
+  const [submitAttempted, setSubmitAttempted] = useState(false);
   const [form, setForm] = useState({
     name: '',
     company: '',
@@ -148,14 +150,39 @@ function BlueprintBooking({
 
   const applicationEmail = form.email || email;
   const isEmailValid = /\S+@\S+\.\S+/.test(applicationEmail);
+  const phoneDigits = form.phone.replace(/\D/g, '');
+  const isPhoneValid = phoneDigits.length === 8;
   const hasThreePreferences = userPreferences.length === 3;
   const isFormValid =
     isEmailValid &&
     form.name.trim() &&
     form.company.trim() &&
-    form.phone.trim() &&
+    isPhoneValid &&
     form.description.trim() &&
     form.acceptsTerms;
+
+  const validationErrors = {
+    company: form.company.trim() ? '' : 'Udfyld virksomhedens navn.',
+    name: form.name.trim() ? '' : 'Udfyld kontaktperson.',
+    phone: form.phone.trim()
+      ? (isPhoneValid ? '' : 'Telefonnummer skal indeholde præcis 8 tal.')
+      : 'Udfyld telefon eller mobil.',
+    email: applicationEmail.trim()
+      ? (isEmailValid ? '' : 'Indtast en gyldig emailadresse.')
+      : 'Udfyld emailadresse.',
+    description: form.description.trim() ? '' : 'Beskriv kort hvad I sælger.',
+    acceptsTerms: form.acceptsTerms ? '' : 'Du skal acceptere betingelserne for at fortsætte.',
+  };
+
+  const markTouched = (field) => {
+    setTouchedFields(prev => ({ ...prev, [field]: true }));
+  };
+
+  const shouldShowError = (field) =>
+    Boolean(validationErrors[field] && (submitAttempted || touchedFields[field]));
+
+  const fieldClass = (field, extraClass = '') =>
+    `form-field ${extraClass} ${shouldShowError(field) ? 'has-error' : ''}`.trim();
 
   const updateForm = (field) => (e) => {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
@@ -163,6 +190,7 @@ function BlueprintBooking({
   };
 
   const handleContinueToMap = async () => {
+    setSubmitAttempted(true);
     if (!isFormValid) return;
     const completeForm = { ...form, email: applicationEmail };
     setEmail(applicationEmail);
@@ -427,21 +455,24 @@ function BlueprintBooking({
           </div>
 
           <div className="application-form">
-            <div className="form-field form-field-full">
+            <div className={fieldClass('company', 'form-field-full')}>
               <label>Virksomhedens navn *</label>
-              <input type="text" value={form.company} onChange={updateForm('company')} />
+              <input type="text" value={form.company} onChange={updateForm('company')} onBlur={() => markTouched('company')} aria-invalid={shouldShowError('company')} />
+              {shouldShowError('company') && <p className="field-error">{validationErrors.company}</p>}
             </div>
-            <div className="form-field form-field-full">
+            <div className={fieldClass('name', 'form-field-full')}>
               <label>Kontaktperson *</label>
-              <input type="text" value={form.name} onChange={updateForm('name')} />
+              <input type="text" value={form.name} onChange={updateForm('name')} onBlur={() => markTouched('name')} aria-invalid={shouldShowError('name')} />
+              {shouldShowError('name') && <p className="field-error">{validationErrors.name}</p>}
             </div>
             <div className="form-field">
               <label>CVR nr.</label>
               <input type="text" value={form.cvr} onChange={updateForm('cvr')} />
             </div>
-            <div className="form-field">
+            <div className={fieldClass('phone')}>
               <label>Telefon / mobil *</label>
-              <input type="tel" value={form.phone} onChange={updateForm('phone')} />
+              <input type="tel" inputMode="numeric" value={form.phone} onChange={updateForm('phone')} onBlur={() => markTouched('phone')} aria-invalid={shouldShowError('phone')} />
+              {shouldShowError('phone') && <p className="field-error">{validationErrors.phone}</p>}
             </div>
             <div className="form-field form-field-full">
               <label>Adresse</label>
@@ -451,9 +482,10 @@ function BlueprintBooking({
               <label>Postnummer og by</label>
               <input type="text" value={form.postalCity} onChange={updateForm('postalCity')} />
             </div>
-            <div className="form-field">
+            <div className={fieldClass('email')}>
               <label>Email *</label>
-              <input type="email" value={applicationEmail} onChange={(e) => { setEmail(e.target.value); setForm(prev => ({ ...prev, email: e.target.value })); }} />
+              <input type="email" value={applicationEmail} onChange={(e) => { setEmail(e.target.value); setForm(prev => ({ ...prev, email: e.target.value })); }} onBlur={() => markTouched('email')} aria-invalid={shouldShowError('email')} />
+              {shouldShowError('email') && <p className="field-error">{validationErrors.email}</p>}
             </div>
             <div className="form-field form-field-full">
               <label>Website</label>
@@ -467,19 +499,24 @@ function BlueprintBooking({
               <label>Antal stole (45 kr. pr. stk.)</label>
               <input type="number" min="0" value={form.chairCount} onChange={updateForm('chairCount')} />
             </div>
-            <div className="form-field form-field-full">
+            <div className={fieldClass('description', 'form-field-full')}>
               <label>Kort beskrivelse af forretning / stand *</label>
-              <textarea rows="4" value={form.description} onChange={updateForm('description')} />
+              <textarea rows="4" value={form.description} onChange={updateForm('description')} onBlur={() => markTouched('description')} aria-invalid={shouldShowError('description')} />
+              {shouldShowError('description') && <p className="field-error">{validationErrors.description}</p>}
             </div>
             <div className="form-field form-field-full">
               <label>For nye stadeholdere: produkter der sælges</label>
               <textarea rows="4" value={form.newVendorProducts} onChange={updateForm('newVendorProducts')} />
             </div>
-            <label className="terms-check">
-              <input type="checkbox" checked={form.acceptsTerms} onChange={updateForm('acceptsTerms')} />
+            <label className={`terms-check ${shouldShowError('acceptsTerms') ? 'has-error' : ''}`}>
+              <input type="checkbox" checked={form.acceptsTerms} onChange={updateForm('acceptsTerms')} onBlur={() => markTouched('acceptsTerms')} aria-invalid={shouldShowError('acceptsTerms')} />
               <span>Jeg bekræfter, at oplysningerne er korrekte, og at jeg har læst praktisk information og regler i ansøgningsmaterialet.</span>
+              {shouldShowError('acceptsTerms') && <p className="field-error terms-error">{validationErrors.acceptsTerms}</p>}
             </label>
-            <button className="btn btn-book drawer-submit" disabled={!isFormValid || recommendationsLoading} onClick={handleContinueToMap}>
+            {submitAttempted && !isFormValid && (
+              <p className="form-error-summary">Ret de markerede felter for at fortsætte.</p>
+            )}
+            <button className="btn btn-book drawer-submit" disabled={recommendationsLoading} onClick={handleContinueToMap}>
               {recommendationsLoading ? 'Finder standforslag...' : 'Fortsæt til standvalg'}
             </button>
           </div>

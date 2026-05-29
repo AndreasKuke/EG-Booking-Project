@@ -500,6 +500,27 @@
   gap: 0.8rem;
 }
 
+.application-form .form-field.has-error input,
+.application-form .form-field.has-error textarea {
+  border-color: #c62828;
+  background: #fffafa;
+}
+
+.field-error,
+.form-error-summary {
+  color: #c62828;
+  font-size: 0.72rem;
+  font-style: italic;
+  line-height: 1.35;
+  margin: 0.3rem 0 0;
+}
+
+.form-error-summary {
+  font-weight: 700;
+  grid-column: 1 / -1;
+  margin-top: 0;
+}
+
 .application-form textarea {
   background: white;
   border: 1.5px solid #ddd;
@@ -560,15 +581,31 @@
   align-items: flex-start;
   color: #555;
   display: flex;
+  flex-wrap: wrap;
   font-size: 0.78rem;
   gap: 0.55rem;
   grid-column: 1 / -1;
   line-height: 1.4;
+  padding: 0.45rem 0;
 }
 
 .terms-check input {
   margin-top: 0.18rem;
   flex-shrink: 0;
+}
+
+.terms-check.has-error {
+  color: #8b1a1a;
+}
+
+.terms-check.has-error input {
+  outline: 2px solid #c62828;
+  outline-offset: 2px;
+}
+
+.terms-error {
+  flex-basis: 100%;
+  margin-left: 1.65rem;
 }
 
 /* ── Email Input ────────────────────────────────────────── */
