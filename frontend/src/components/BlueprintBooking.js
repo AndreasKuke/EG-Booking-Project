@@ -1,3 +1,4 @@
+'use client';
 import React, { useMemo, useState } from 'react';
 import './BlueprintBooking.css';
 
@@ -21,8 +22,7 @@ const STAND_TYPES = [
 ];
 
 // Pragmatic mapping from the supplied PDFs to the site-map shapes:
-// Kostalden has the most booths and is placed in the large lower road building.
-// Laden has many booths and is placed in the large right-side building.
+// Kostalden and Laden are mapped to the opposite site-map shapes to match the venue map.
 // Hestestalden and Jagtstuen are placed in the smaller remaining buildings.
 const BUILDINGS = [
   {
@@ -55,8 +55,8 @@ const BUILDINGS = [
     name: 'Kostalden',
     pdf: 'FINAL_Stadeplan_Kostald 2025.pdf',
     standIds: range(12, 57),
-    siteShape: 'bottom-long',
-    siteLabel: { x: 395, y: 800 },
+    siteShape: 'right-long',
+    siteLabel: { x: 780, y: 470 },
     standSize: '3 x 3 m',
   },
   {
@@ -73,8 +73,8 @@ const BUILDINGS = [
     name: 'Laden',
     pdf: 'Final_Stadeplan_Laden 2025.pdf',
     standIds: range(64, 97),
-    siteShape: 'right-long',
-    siteLabel: { x: 780, y: 470 },
+    siteShape: 'bottom-long',
+    siteLabel: { x: 395, y: 800 },
     standSize: '2,5 x 3 m',
   },
 ];
@@ -297,10 +297,10 @@ function BlueprintBooking({
   );
 
   const renderKostalden = () => {
-    const top = range(14, 31).map((id, i) => renderBooth(id, 170 + i * 41, 92, 40, 54));
-    const middleLeft = [42, 41, 40, 39, 38, 37].map((id, i) => renderBooth(id, 245 + i * 70, 205, 66, 54));
-    const middleRight = [35, 34, 33, 32].map((id, i) => renderBooth(id, 700 + i * 58, 205, 55, 54));
-    const bottom = range(43, 57).map((id, i) => renderBooth(id, 205 + i * 45, 340, 43, 54));
+    const top = range(14, 31).map((id, i) => renderBooth(id, 100 + i * 41, 92, 40, 54));
+    const middleLeft = [42, 41, 40, 39, 38, 37].map((id, i) => renderBooth(id, 200 + i * 70, 220, 66, 54));
+    const middleRight = [35, 34, 33, 32].map((id, i) => renderBooth(id, 700 + i * 58, 220, 55, 54));
+    const bottom = range(43, 57).map((id, i) => renderBooth(id, 150 + i * 45, 340, 43, 54));
 
     return renderCommonPlanShell(
       <>
@@ -309,8 +309,8 @@ function BlueprintBooking({
         <rect x="130" y="275" width="735" height="58" fill="url(#walkway)" stroke="#58a646" />
         <rect x="130" y="160" width="58" height="173" fill="url(#walkway)" stroke="#58a646" />
         <rect x="840" y="90" width="45" height="300" fill="url(#walkway)" stroke="#58a646" />
-        {renderBooth(12, 100, 275, 34, 55, 12)}
-        {renderBooth(13, 100, 205, 34, 55, 13)}
+        {renderBooth(12, 90, 275, 34, 55, 12)}
+        {renderBooth(13, 90, 205, 34, 55, 13)}
         {top}
         {middleLeft}
         {middleRight}
@@ -319,7 +319,7 @@ function BlueprintBooking({
         {renderExit(850, 90)}
         {renderExit(850, 345)}
         <text x="500" y="45" textAnchor="middle" fontSize="22" fontWeight="700" fill="#2d5016">KOSTALDEN</text>
-        <text x="560" y="245" textAnchor="middle" fontSize="12" fill="#777">Cafeområde</text>
+        <text x="650" y="245" textAnchor="middle" fontSize="12" fill="#777">Cafeområde</text>
       </>, 1000, 480
     );
   };
@@ -357,7 +357,7 @@ function BlueprintBooking({
         {middleA}
         {middleB}
         {bottom}
-        {renderBooth(97, 125, 250, 42, 118, 97, -90)}
+        {renderBooth(97, 125, 250, 42, 118, 97, 0)}
         {renderExit(190, 85)}
         {renderExit(830, 375)}
         <text x="500" y="38" textAnchor="middle" fontSize="22" fontWeight="700" fill="#2d5016">LADEN</text>
