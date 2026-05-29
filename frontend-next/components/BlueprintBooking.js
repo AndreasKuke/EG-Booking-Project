@@ -131,7 +131,6 @@ function BlueprintBooking({
     website: '',
     description: '',
     newVendorProducts: '',
-    standType: '',
     tableCount: '',
     chairCount: '',
     acceptsTerms: false,
@@ -153,7 +152,6 @@ function BlueprintBooking({
     form.company.trim() &&
     form.phone.trim() &&
     form.description.trim() &&
-    form.standType &&
     form.acceptsTerms;
 
   const updateForm = (field) => (e) => {
@@ -511,25 +509,12 @@ function BlueprintBooking({
                 <input type="text" value={form.website} onChange={updateForm('website')} />
               </div>
 
-              <div className="form-field form-field-full">
-                <label>Leje af standard stand *</label>
-                <div className="stand-type-list">
-                  {STAND_TYPES.map(type => (
-                    <label key={type.value} className="stand-type-option">
-                      <input type="radio" name="standType" value={type.value} checked={form.standType === type.value} onChange={updateForm('standType')} />
-                      <span>{type.label}</span>
-                      <small>{type.price}</small>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
               <div className="form-field">
-                <label>Antal borde</label>
+                <label>Antal borde (155 kr. pr. stk.)</label>
                 <input type="number" min="0" value={form.tableCount} onChange={updateForm('tableCount')} />
               </div>
               <div className="form-field">
-                <label>Antal stole</label>
+                <label>Antal stole (45 kr. pr. stk.)</label>
                 <input type="number" min="0" value={form.chairCount} onChange={updateForm('chairCount')} />
               </div>
               <div className="form-field form-field-full">

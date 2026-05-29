@@ -13,6 +13,18 @@ function getStandType(id) {
   return id <= 54 ? 'Indendørs' : 'Udendørs';
 }
 
+function getFurnitureSummary(tableCount, chairCount) {
+  const tables = Number(tableCount) || 0;
+  const chairs = Number(chairCount) || 0;
+  const lines = [];
+
+  if (tables > 0) lines.push(`Borde: ${tables} x 155 kr. = ${tables * 155} kr.`);
+  if (chairs > 0) lines.push(`Stole: ${chairs} x 45 kr. = ${chairs * 45} kr.`);
+  if (lines.length > 0) lines.push(`Tilvalg i alt: ${tables * 155 + chairs * 45} kr.`);
+
+  return lines.length > 0 ? `\n${lines.join('\n')}` : '';
+}
+
 function AdminPanel({ stands, bookings, submissions, onAcceptSubmission, onAssignStand, onRefresh }) {
   const [assignInputs, setAssignInputs]   = useState({});
   const [showAssignFor, setShowAssignFor] = useState(null);
@@ -37,6 +49,7 @@ function AdminPanel({ stands, bookings, submissions, onAcceptSubmission, onAssig
 
   const handleAcceptClick = async (sub, standId) => {
     const choiceRank = sub.preferences.find(p => p.standId === standId)?.rank ?? 1;
+    const stand = stands.find(s => s.id === standId);
 
     setEmailModal({
       sub,
@@ -58,15 +71,25 @@ function AdminPanel({ stands, bookings, submissions, onAcceptSubmission, onAssig
           description:   sub.description,
           standId,
           standLocation: getStandLocation(standId),
-          standType:     getStandType(standId),
-          price:         '500',
+          standType:     stand?.description || getStandType(standId),
+          price:         stand?.priceLabel || `DKK ${stand?.price || '0.00'}`,
+          tableCount:    sub.tableCount,
+          chairCount:    sub.chairCount,
           choiceRank,
         }),
       });
       const data = await res.json();
+      if (!res.ok || !data.subject?.trim() || !data.draft?.trim()) {
+        throw new Error(data.error || 'Email draft response was empty');
+      }
       setEmailModal(prev => ({ ...prev, draft: data.draft, subject: data.subject, loading: false }));
     } catch {
-      setEmailModal(prev => ({ ...prev, draft: 'Kunne ikke generere udkast. Skriv e-mailen manuelt.', loading: false }));
+      setEmailModal(prev => ({
+        ...prev,
+        subject: `Din standplads til Engestofte Julemarked - Stand ${standId}`,
+        draft: `Kære ${sub.name || sub.company || 'udstiller'},\n\nVi kan med glæde bekræfte, at I har fået tildelt stand ${standId} til Engestofte Julemarked.\n\nStandpris: ${stand?.priceLabel || `DKK ${stand?.price || '0.00'}`}${getFurnitureSummary(sub.tableCount, sub.chairCount)}\n\nI modtager yderligere information om betaling og opstillingsdato snarest.\n\nVenlig hilsen,\nEngestofte Julemarked`,
+        loading: false,
+      }));
     }
   };
 
@@ -78,8 +101,8 @@ function AdminPanel({ stands, bookings, submissions, onAcceptSubmission, onAssig
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           to:      emailModal.sub.email,
-          subject: emailModal.subject,
-          body:    emailModal.draft,
+          subject: emailModal.subject.trim(),
+          body:    emailModal.draft.trim(),
         }),
       });
       const data = await res.json();
@@ -140,7 +163,7 @@ function AdminPanel({ stands, bookings, submissions, onAcceptSubmission, onAssig
                     <div className="sub-name">{sub.name}</div>
                     <div className="sub-meta">{sub.company}{sub.phone ? ` · ${sub.phone}` : ''}</div>
                     <div className="sub-meta">{sub.email}</div>
-                    {sub.description && <div className="sub-desc">"{sub.description}"</div>}
+                    {sub.description && <div className="sub-desc">&quot;{sub.description}&quot;</div>}
                   </div>
                   <div className="sub-header-right">
                     <div className={`sub-status-badge ${sub.status}`}>
@@ -321,7 +344,7 @@ function AdminPanel({ stands, bookings, submissions, onAcceptSubmission, onAssig
                   <button
                     className="email-send-btn"
                     onClick={handleSendAndConfirm}
-                    disabled={sendStatus === 'sending' || sendStatus === 'sent'}
+                    disabled={sendStatus === 'sending' || sendStatus === 'sent' || !emailModal.subject.trim() || !emailModal.draft.trim()}
                   >
                     {sendStatus === 'sending' ? 'Sender...' : 'Send & Bekræft'}
                   </button>
