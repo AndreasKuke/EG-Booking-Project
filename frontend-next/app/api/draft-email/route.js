@@ -56,14 +56,15 @@ Engestofte Julemarked`,
 }
 
 function parseDraftResponse(text) {
+  const stripped = text.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/i, '').trim();
   try {
-    const parsed = JSON.parse(text);
+    const parsed = JSON.parse(stripped);
     return {
       subject: parsed.subject?.trim() || '',
       draft: parsed.body?.trim() || parsed.draft?.trim() || '',
     };
   } catch {
-    return { subject: '', draft: text?.trim() || '' };
+    return { subject: '', draft: stripped };
   }
 }
 
